@@ -2,8 +2,6 @@
 
 Este é um sistema de cadastro e login de usuários desenvolvido com Flask e SQLite3. O sistema permite criar, editar e visualizar usuários. Os usuários podem ser ativados ou desativados, mas a exclusão não é permitida. Usuários desativados não podem acessar o sistema.
 
-![imagem](static/images/a.png)
-
 ## Funcionalidades
 
 - **Cadastro de usuários**: Permite o cadastro de novos usuários com login, senha, nome completo e status (ativo ou inativo).
