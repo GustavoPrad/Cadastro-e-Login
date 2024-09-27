@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #4f0606;
+            color: white;
+        }
+
+        h1, h2 {
+            color: #fff;
+            text-align: center;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            background-color: #9f0000;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #090303;
+        }
+
+        .flashes {
+            margin-top: 15px;
+        }
+
+        .flashes li {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .flashes .success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .flashes .danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.1); /* Fundo da tabela */
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Usuários</h1>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/cadastro" method="post">
+        <label for="login">Login:</label>
+        <input type="email" id="login" name="login" required>
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+
+        <label for="nome_completo">Nome Completo:</label>
+        <input type="text" id="nome_completo" name="nome_completo" required>
+
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="1">Ativo</option>
+            <option value="2">Inativo</option>
+        </select>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Usuários Cadastrados</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Nome Completo</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Ações</th>
+        </tr>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario['id'] }}</td>
+            <td>{{ usuario['login'] }}</td>
+            <td>
+                <form action="{{ url_for('editar_usuario', id=usuario['id']) }}" method="post">
+                    <input type="text" name="nome_completo" value="{{ usuario['nome_completo'] }}" required>
+                    <input type="email" name="login" value="{{ usuario['login'] }}" required>
+                    <input type="password" name="senha" placeholder="Nova senha (opcional)">
+            </td>
+            <td>
+                <select name="status">
+                    <option value="1" {{ 'selected' if usuario['status'] == 1 }}>Ativo</option>
+                    <option value="2" {{ 'selected' if usuario['status'] == 2 }}>Inativo</option>
+                </select>
+            </td>
+            <td>{{ usuario['created'] }}</td>
+            <td>{{ usuario['modified'] }}</td>
+            <td>
+                    <button type="submit">Salvar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuários</title>
+</head>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Usuários {% endblock %}</h1>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Login</th>
+                <th>Senha</th>
+                <th>Nome completo</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dado in dados %}
+            <tr>
+                <td>{{ dado.id }}</td>
+                <td>{{ dado.login }}</td>
+                <td>{{ dado.senha }}</td>
+                <td>{{ dado.nome_completo }}</td>
+                <td>{{ dado.created }}</td>
+                <td>{{ dado.status }}</td>
+                <td>{{ dado.modified }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+</html>
