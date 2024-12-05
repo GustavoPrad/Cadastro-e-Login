@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url(../static/images/background3.jpg) no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .store-container {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .store-container.active {
+            display: flex;
+        }
+
+        .product-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            color: #777;
+            margin: 5px 0;
+        }
+
+        .product-card .price {
+            font-size: 16px;
+            color: #b30000;
+            font-weight: bold;
+        }
+
+        .btn {
+            background-color: #b30000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #000000;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination button {
+            background-color: #b30000;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background-color: #000000;
+        }
+
+        .pagination button.active {
+            background-color: #333;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Página 1 -->
+    <div class="store-container active" id="page-1">
+        <div class="product-card">
+            <img src="../static/images/produto1.jpg" alt="Produto 1">
+            <h2>Produto 1</h2>
+            <p>Descrição breve do Produto 1.</p>
+            <div class="price">R$ 49,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+        <div class="product-card">
+            <img src="../static/images/produto2.jpg" alt="Produto 2">
+            <h2>Produto 2</h2>
+            <p>Descrição breve do Produto 2.</p>
+            <div class="price">R$ 79,90</div>
+            <button class="btn">Adicionarrrrrrrrrr ao Carrinho</button>
+        </div>
+        <!-- Outros produtos dessa página -->
+    </div>
+
+    <!-- Página 2 -->
+    <div class="store-container" id="page-2">
+        <div class="product-card">
+            <img src="../static/images/produto3.jpg" alt="Produto 3">
+            <h2>Produto 3</h2>
+            <p>Descrição breve do Produto 3.</p>
+            <div class="price">R$ 29,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+        <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 5.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 6.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+                <div class="product-card">
+            <img src="../static/images/produto4.jpg" alt="Produto 4">
+            <h2>Produto 4</h2>
+            <p>Descrição breve do Produto 4.</p>
+            <div class="price">R$ 99,90</div>
+            <button class="btn">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination">
+        <button onclick="showPage(1)" class="active">1</button>
+        <button onclick="showPage(2)">2</button>
+    </div>
+
+    <script>
+        function showPage(pageNumber) {
+            // Oculta todas as páginas
+            const pages = document.querySelectorAll('.store-container');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Mostra a página correspondente
+            document.getElementById(`page-${pageNumber}`).classList.add('active');
+
+            // Atualiza os botões de paginação
+            const buttons = document.querySelectorAll('.pagination button');
+            buttons.forEach(button => button.classList.remove('active'));
+            buttons[pageNumber - 1].classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
