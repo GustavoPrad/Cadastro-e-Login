@@ -1,9 +1,28 @@
-# Sistema de Cadastro e Login de Usuários
+# Sistema de Cadastro e Login de Usuários e Produtos
 
 # IMPORTANTE
 Para aplicação rodar primeiramente fazer a criação do banco de dados utilizando o /initdb. Após isso fazer o cadastro de usuário (isso é necessário pois ele verifica se o email existe no banco antes de enviar link para recuperação de senha.) 
 
-Este é um sistema de cadastro e login de usuários desenvolvido com Flask e SQLite3. O sistema permite criar, editar e visualizar usuários. Os usuários podem ser ativados ou desativados, mas a exclusão não é permitida. Usuários desativados não podem acessar o sistema.
+# CONTROLE DE ACESSO
+Há dois tipos de usuários, o admin e o usuário comum, a tela de login é a mesma, porém quando autenticado com as credenciais do admin, ele abre uma tela onde ele pode adicionar e remover produtos de uma loja. E quando autenticado com um usuario comum, ele abre a página da loja.
+Credenciais para teste:
+
+Usuario comum: 
+login: usuariocomum@gmail.com 
+senha: usuariocomum
+
+Administrador:
+login: administrador@gmail.com
+senha: admin123
+
+# PAGINAÇÃO
+Há duas páginas que utilizam paginação, a tela de cadastro de usuários, que pode ser acessada clicando no botão "Cadastrar e Gerenciar Usuarios" e também a tela da loja, que pode ser acessada após você logar na aplicação utilizando credenciais previamente cadastradas.
+
+# INTERNACIONALIZAÇÃO
+Não foi implementada devido a erros.
+
+
+Este é um sistema de cadastro e login de usuários e produtos desenvolvido com Flask e SQLite3. O sistema permite criar, editar e visualizar usuários. Os usuários podem ser ativados ou desativados, mas a exclusão não é permitida. Usuários desativados não podem acessar o sistema.
 
 ## Funcionalidades
 
