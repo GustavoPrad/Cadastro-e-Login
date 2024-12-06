@@ -1,14 +1,19 @@
 # Sistema de Cadastro e Login de Usuários
 
+# IMPORTANTE
+Para aplicação rodar primeiramente fazer a criação do banco de dados utilizando o /initdb. Após isso fazer o cadastro de usuário (isso é necessário pois ele verifica se o email existe no banco antes de enviar link para recuperação de senha.) 
+
 Este é um sistema de cadastro e login de usuários desenvolvido com Flask e SQLite3. O sistema permite criar, editar e visualizar usuários. Os usuários podem ser ativados ou desativados, mas a exclusão não é permitida. Usuários desativados não podem acessar o sistema.
 
 ## Funcionalidades
 
 - **Cadastro de usuários**: Permite o cadastro de novos usuários com login, senha, nome completo e status (ativo ou inativo).
 - **Login de usuários**: Apenas usuários ativos podem se logar no sistema.
+- **Login de usuários via google e Github**: 
 - **Gerenciamento de status**: Administradores podem modificar o status de um usuário (ativo ou inativo).
 - **Segurança**: As senhas são armazenadas de forma segura usando hashing (`werkzeug.security`).
 - **Banco de dados**: Para iniciar banco de dados, acessar página utilizando /initdb no final.
+- **Recuperação de senha**: Recuperação de senha.
 
 ## Requisitos para Rodar a Aplicação
 
