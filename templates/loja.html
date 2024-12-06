@@ -2,123 +2,116 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Loja</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja - Produtos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background: url(../static/images/background3.jpg) no-repeat center center fixed;
             background-size: cover;
         }
-
-        .store-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
+        .container {
             max-width: 1200px;
             margin: auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
         }
-
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
         .product-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 200px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
         }
-
         .product-card img {
             max-width: 100%;
             border-radius: 5px;
         }
-
         .product-card h2 {
             font-size: 18px;
-            color: #333;
             margin: 10px 0;
         }
-
         .product-card p {
-            color: #777;
-            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
         }
-
         .product-card .price {
             font-size: 16px;
-            color: #b30000;
             font-weight: bold;
+            color: green;
         }
-
-        .btn {
-            background-color: #b30000;
+        .add-to-cart-btn {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
             color: white;
+            font-size: 16px;
             border: none;
-            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            text-align: center;
+            width: 100%;
         }
-
-        .btn:hover {
-            background-color: #000000;
+        .add-to-cart-btn:hover {
+            background-color: #45a049;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+        .pagination span {
+            margin: 0 10px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-
-    <div class="store-container">
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto1.jpg') }}" alt="Produto 1">
-            <h2>Produto 1</h2>
-            <p>Descrição breve do Produto 1.</p>
-            <div class="price">R$ 49,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
+    <div class="container">
+        <h1>Loja - Produtos</h1>
+        <div class="product-list">
+            {% for produto in produtos %}
+            <div class="product-card">
+                <img src="{{ produto['imagem'] }}" alt="{{ produto['nome'] }}">
+                <h2>{{ produto['nome'] }}</h2>
+                <p>{{ produto['descricao'] }}</p>
+                <button class="add-to-cart-btn" disabled>Adicionar ao Carrinho</button>
+            </div>
+            {% endfor %}
         </div>
 
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto2.jpg') }}" alt="Produto 2">
-            <h2>Produto 2</h2>
-            <p>Descrição breve do Produto 2.</p>
-            <div class="price">R$ 79,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
+        <!-- Navegação de Paginação -->
+        <div class="pagination">
+            {% if current_page > 1 %}
+            <a href="?page={{ current_page - 1 }}">&laquo; Anterior</a>
+            {% endif %}
 
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto3.jpg') }}" alt="Produto 3">
-            <h2>Produto 3</h2>
-            <p>Descrição breve do Produto 3.</p>
-            <div class="price">R$ 29,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
+            <span>Página {{ current_page }} de {{ total_pages }}</span>
 
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto4.jpg') }}" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto5.jpg') }}" alt="Produto 5">
-            <h2>Produto 5</h2>
-            <p>Descrição breve do Produto 5.</p>
-            <div class="price">R$ 59,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/produto6.jpg') }}" alt="Produto 6">
-            <h2>Produto 6</h2>
-            <p>Descrição breve do Produto 6.</p>
-            <div class="price">R$ 39,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
+            {% if current_page < total_pages %}
+            <a href="?page={{ current_page + 1 }}">Próxima &raquo;</a>
+            {% endif %}
         </div>
     </div>
-
 </body>
 </html>

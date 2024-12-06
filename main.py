@@ -1,14 +1,14 @@
 from flask import Flask, request, render_template, flash, redirect, url_for, session
+import os
 import sqlite3
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import secrets
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.contrib.github import make_github_blueprint, github
-
-# Configuração da aplicação Flask
 app = Flask(__name__)
 app.secret_key = 'peixefrito123'
 
@@ -27,6 +27,64 @@ github_bp = make_github_blueprint(
     redirect_to="github_login"
 )
 app.register_blueprint(github_bp, url_prefix="/login/github")
+
+# Salvar imagens de produtos
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def get_db():
+    conn = sqlite3.connect('banco.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Cadastro de produtos da loja
+@app.route('/adminloja', methods=['GET', 'POST'])
+def adminloja():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        descricao = request.form['descricao']
+        imagem = request.files['imagem']
+
+        if imagem:
+            filename = secure_filename(imagem.filename)
+            imagem_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            imagem.save(imagem_path)
+
+            cursor.execute(
+                'INSERT INTO produtos (nome, descricao, imagem) VALUES (?, ?, ?)',
+                (nome, descricao, imagem_path)
+            )
+            conn.commit()
+
+            flash('Produto cadastrado com sucesso!', 'success')
+        else:
+            flash('Erro ao cadastrar produto: a imagem é obrigatória.', 'danger')
+
+    # Listagem de produtos
+    cursor.execute('SELECT * FROM produtos ORDER BY created_at DESC')
+    produtos = cursor.fetchall()
+    conn.close()
+
+    return render_template('adminloja.html', produtos=produtos)
+
+# Rota para apagar produto
+@app.route('/adminloja/delete/<int:id>', methods=['POST'])
+def delete_produto(id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute('DELETE FROM produtos WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+
+    flash('Produto apagado com sucesso!', 'success')
+    return redirect(url_for('adminloja'))
 
 # Rota para login com Google
 @app.route('/login/google')
@@ -75,16 +133,13 @@ def get_db():
     return db
 
 
-# Criar a tabela de dados, se ainda não existir
+# Criar a tabela de dados
 def init_db():
     with app.app_context():
         db = get_db()
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
             db.commit()
-
-
-# Rota para inicializar o banco de dados
 @app.route('/initdb')
 def initialize_database():
     init_db()
@@ -108,12 +163,15 @@ def login():
         conn = get_db()
         cursor = conn.cursor()
 
-        # Verificação de credenciais
         cursor.execute('SELECT * FROM usuarios WHERE login = ?', (login,))
         user = cursor.fetchone()
 
         if user and check_password_hash(user['senha'], senha):
-            if user['status'] == 1:  # 1 é ativo, 2 é inativo
+            if login == 'administrador@gmail.com' and senha == 'admin123':
+                # Credenciais específicas do administrador
+                flash('Bem-vindo, Administrador!', 'success')
+                return redirect(url_for('adminloja'))
+            elif user['status'] == 1:  # 1 é ativo, 2 é inativo
                 flash('Login bem-sucedido!', 'success')
                 return redirect(url_for('loja'))
             else:
@@ -125,15 +183,13 @@ def login():
 
     return render_template('login.html')
 
+
 # Rota para solicitar redefinição de senha
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
         email = request.form['email']
-        # Aqui vocês irão verificar no banco de dados se o email recebido é válido,
-        # ou seja, se é usuário do sistema.
 
-        # Preparação e envio do email
         token = s.dumps(email, salt='password_recovery')
         msg = Message('Redefinição de senha', sender='gustavoprado641@gmail.com', recipients=[email])
         link = url_for('reset_password', token=token, _external=True)
@@ -150,7 +206,6 @@ def forgot_password():
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     try:
-        # Carregar o e-mail do token
         email = s.loads(token, salt='password_recovery', max_age=3600)  # 1 hora
     except SignatureExpired:
         return '<h1> O link de redefinição de senha expirou!!!</h1>'
@@ -159,7 +214,7 @@ def reset_password(token):
 
     if request.method == 'POST':
         new_password = request.form['password']
-        hashed_password = generate_password_hash(new_password)  # Gerar hash da nova senha
+        hashed_password = generate_password_hash(new_password)
 
         # Conectar ao banco e atualizar a senha
         conn = get_db()
@@ -180,7 +235,30 @@ def reset_password(token):
 # Rota para loja
 @app.route('/loja')
 def loja():
-    return render_template('loja.html')
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Configuração de paginação
+    page = request.args.get('page', 1, type=int)  # Página atual
+    per_page = 4  # Produtos por página
+    offset = (page - 1) * per_page  # Índice inicial
+
+    cursor.execute('SELECT * FROM produtos ORDER BY created_at DESC LIMIT ? OFFSET ?', (per_page, offset))
+    produtos = cursor.fetchall()
+
+    cursor.execute('SELECT COUNT(*) FROM produtos')
+    total_produtos = cursor.fetchone()[0]
+    total_pages = -(-total_produtos // per_page)  # Arredondamento para cima
+
+    conn.close()
+
+    return render_template(
+        'loja.html',
+        produtos=produtos,
+        current_page=page,
+        total_pages=total_pages,
+    )
+
 
 
 # Rota para cadastro de usuários
@@ -211,10 +289,26 @@ def cadastro():
         conn.close()
         return redirect(url_for('cadastro'))
 
+    # Paginação
+    page = int(request.args.get('page', 1))
+    limit = 10
+    offset = (page - 1) * limit
+
     conn = get_db()
-    usuarios = conn.execute('SELECT * FROM usuarios').fetchall()
+    cursor = conn.cursor()
+
+    # Total de usuários para calcular páginas
+    total_usuarios = cursor.execute('SELECT COUNT(*) FROM usuarios').fetchone()[0]
+    total_pages = (total_usuarios + limit - 1) // limit  # Arredondar para cima
+
+    usuarios = cursor.execute(
+        'SELECT * FROM usuarios LIMIT ? OFFSET ?', (limit, offset)
+    ).fetchall()
+
     conn.close()
-    return render_template('cadastro.html', usuarios=usuarios)
+
+    return render_template('cadastro.html', usuarios=usuarios, page=page, total_pages=total_pages)
+
 
 
 # Rota para edição de usuários

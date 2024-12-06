@@ -9,3 +9,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
   reset_token TEXT,
   reset_token_expiry TIMESTAMP
 );
+
+CREATE TABLE produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    imagem TEXT NOT NULL, -- Caminho da imagem
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+

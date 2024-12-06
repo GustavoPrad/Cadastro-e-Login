@@ -2,210 +2,87 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Loja</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Loja</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background: url(../static/images/background3.jpg) no-repeat center center fixed;
             background-size: cover;
         }
-
-        .store-container {
-            display: none;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
+        .container {
             max-width: 1200px;
             margin: auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
         }
-
-        .store-container.active {
+        form {
+            margin-bottom: 20px;
+        }
+        input, textarea, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .product-list {
             display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-
         .product-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 200px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
         }
-
         .product-card img {
             max-width: 100%;
             border-radius: 5px;
         }
-
-        .product-card h2 {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        .product-card p {
-            color: #777;
-            margin: 5px 0;
-        }
-
-        .product-card .price {
-            font-size: 16px;
-            color: #b30000;
-            font-weight: bold;
-        }
-
-        .btn {
-            background-color: #b30000;
+        .product-card button {
+            margin-top: 10px;
+            background-color: red;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-
-        .btn:hover {
-            background-color: #000000;
+        .product-card button:hover {
+            background-color: darkred;
         }
-
-        .pagination {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .pagination button {
-            background-color: #b30000;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .pagination button:hover {
-            background-color: #000000;
-        }
-
-        .pagination button.active {
-            background-color: #333;
-            color: white;
-        }
-
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Admin - Cadastro de Produtos</h1>
+        <form action="/adminloja" method="POST" enctype="multipart/form-data">
+            <input type="text" name="nome" placeholder="Nome do Produto" required>
+            <textarea name="descricao" placeholder="Descrição do Produto" rows="4" required></textarea>
+            <input type="file" name="imagem" accept="image/*" required>
+            <button type="submit">Cadastrar Produto</button>
+        </form>
 
-    <!-- Página 1 -->
-    <div class="store-container active" id="page-1">
-        <div class="product-card">
-            <img src="../static/images/produto1.jpg" alt="Produto 1">
-            <h2>Produto 1</h2>
-            <p>Descrição breve do Produto 1.</p>
-            <div class="price">R$ 49,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-        <div class="product-card">
-            <img src="../static/images/produto2.jpg" alt="Produto 2">
-            <h2>Produto 2</h2>
-            <p>Descrição breve do Produto 2.</p>
-            <div class="price">R$ 79,90</div>
-            <button class="btn">Adicionarrrrrrrrrr ao Carrinho</button>
-        </div>
-        <!-- Outros produtos dessa página -->
-    </div>
+        <h2>Produtos Cadastrados</h2>
+        <div class="product-list">
+            {% for produto in produtos %}
+            <div class="product-card">
+                <img src="{{ produto['imagem'] }}" alt="{{ produto['nome'] }}">
+                <h2>{{ produto['nome'] }}</h2>
+                <p>{{ produto['descricao'] }}</p>
 
-    <!-- Página 2 -->
-    <div class="store-container" id="page-2">
-        <div class="product-card">
-            <img src="../static/images/produto3.jpg" alt="Produto 3">
-            <h2>Produto 3</h2>
-            <p>Descrição breve do Produto 3.</p>
-            <div class="price">R$ 29,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-        <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 5.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 6.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
-        </div>
-                <div class="product-card">
-            <img src="../static/images/produto4.jpg" alt="Produto 4">
-            <h2>Produto 4</h2>
-            <p>Descrição breve do Produto 4.</p>
-            <div class="price">R$ 99,90</div>
-            <button class="btn">Adicionar ao Carrinho</button>
+                <!-- Formulário para excluir o produto -->
+                <form action="{{ url_for('delete_produto', id=produto['id']) }}" method="POST">
+                    <button type="submit">Excluir Produto</button>
+                </form>
+            </div>
+            {% endfor %}
         </div>
     </div>
-
-    <!-- Paginação -->
-    <div class="pagination">
-        <button onclick="showPage(1)" class="active">1</button>
-        <button onclick="showPage(2)">2</button>
-    </div>
-
-    <script>
-        function showPage(pageNumber) {
-            // Oculta todas as páginas
-            const pages = document.querySelectorAll('.store-container');
-            pages.forEach(page => page.classList.remove('active'));
-
-            // Mostra a página correspondente
-            document.getElementById(`page-${pageNumber}`).classList.add('active');
-
-            // Atualiza os botões de paginação
-            const buttons = document.querySelectorAll('.pagination button');
-            buttons.forEach(button => button.classList.remove('active'));
-            buttons[pageNumber - 1].classList.add('active');
-        }
-    </script>
-
 </body>
 </html>

@@ -162,5 +162,16 @@
         </tr>
         {% endfor %}
     </table>
+
+    <div>
+        <p>Página {{ page }} de {{ total_pages }}</p>
+            {% if page > 1 %}
+                <a href="{{ url_for('cadastro', page=page-1) }}">Página Anterior</a>
+            {% endif %}
+            {% if page < total_pages %}
+                <a href="{{ url_for('cadastro', page=page+1) }}">Próxima Página</a>
+                {% endif %}
+    </div>
+
 </body>
 </html>
